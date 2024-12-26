@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dev": "nodemon src/exercise_1.js",
+    "start": "node src/exercise_1.js"
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",

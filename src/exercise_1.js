@@ -8,9 +8,27 @@
  * isStringEmpty('   '); => true
  * isStringEmpty(); => throws error "text must be defined"
  */
-function isStringEmpty(text) {
-  // Your code here
+ function isStringEmpty(text){
+        
+  if(text === undefined){
+      throw new Error("text must be defined");
+  }
+  
+  if(text.length === 0 || text.match(/\s/) !== null){
+      return true;
+  }else{
+      return false;
+  }
 }
+
+
+
+
+
+
+
+
+
 
 /**
  * Write a function to truncate text
@@ -22,9 +40,24 @@ function isStringEmpty(text) {
  * truncateString('Hello world'); => throws error "Please specify number of characters to extract"
  * truncateString(''); => throws error "text must have at least one character"
  */
-function truncateString(text, numberOfCharacters) {
-  // Your code here
+ function truncateString(text, numberOfCharacters) {
+  // Check if text is empty or undefined
+  if (!text || text.trim() === '') {
+    throw new Error("text must have at least one character");
+  }
+
+  // Check if the number of characters is undefined
+  if (numberOfCharacters === undefined) {
+    throw new Error("Please specify number of characters to extract");
+  }
+
+  // Truncate the string
+  return text.substring(0, numberOfCharacters);
 }
+
+
+
+
 
 /**
  * Write a function to create social media post hash tag
@@ -37,9 +70,26 @@ function truncateString(text, numberOfCharacters) {
  * createHashTag(); => throws error "Text should have at least three characters"
  * createHashTag('   '); => throws error "Text should have at least three characters"
  */
-function createHashTag(text) {
-  // Your code here
+ function createHashTag(text) {
+  // Agar text aniqlanmagan yoki bo'sh bo'lsa, xatolik qaytaradi
+  if (!text || text.trim().length < 3) {
+    throw new Error("Text should have at least three characters");
+  }
+
+  // Bo'sh joylarni olib tashlab, so'zlarni ajratib olish
+  const words = text.trim().toLowerCase().split(/\s+/);
+
+  // Har bir so'zning birinchi harfini katta qiladi va birlashtiradi
+  const hashtag = words.map((word, index) => {
+    return index === 0 ? word : word[0].toUpperCase() + word.slice(1);
+  }).join("");
+
+  // "#" belgisi bilan qaytarish
+  return `#${hashtag}`;
 }
+
+
+
 
 /**
  * Write a function to format phone number as '+998 99 777 66 55'
@@ -55,7 +105,22 @@ function createHashTag(text) {
  */
 function formatPhoneNumber(phoneNumber) {
   // Your code here
+  if (!phoneNumber) {
+    throw new Error("Phone number must be either 9 or 12 characters long");
+  }
+
+  // Telefon raqami uzunligini tekshirish
+  if (phoneNumber.toString().length !== 9 && phoneNumber.toString().length !== 12) {
+    throw new Error("Phone number must be either 9 or 12 characters long");
+  }
+
+  if (phoneNumber.toString().length === 9) {
+    return `+998 ${phoneNumber.toString().slice(0, 2)} ${phoneNumber.toString().slice(2, 5)} ${phoneNumber.toString().slice(5, 7)} ${phoneNumber.toString().slice(7)}`;
+  } else {
+    return `+${phoneNumber.toString().slice(0, 3)} ${phoneNumber.toString().slice(3, 5)} ${phoneNumber.toString().slice(5, 8)} ${phoneNumber.toString().slice(8, 10)} ${phoneNumber.toString().slice(10)}`;
+  }
 }
+
 
 /**
  * Write a function that transforms text to different cases
@@ -70,7 +135,30 @@ function formatPhoneNumber(phoneNumber) {
  */
 function changeTextCase(text, caseName) {
   // Your code here
+  if (!text || !caseName) {
+    throw new Error("Both text and caseName are required.");
+  }
+
+  const validCases = ['camel', 'kebab', 'snake'];
+  if (!validCases.includes(caseName)) {
+    throw new Error(`Invalid caseName. Valid options are: ${validCases.join(', ')}`);
+  }
+
+  const words = text.split(' ');
+
+  switch (caseName) {
+    case 'camel':
+      return words.map((word, index) => (index === 0 ? word.toLowerCase() : word[0].toUpperCase() + word.slice(1).toLowerCase())).join('');
+    case 'kebab':
+      return words.map(word => word.toLowerCase()).join('-');
+    case 'snake':
+      return words.map(word => word.toLowerCase()).join('_');
+    default:
+      throw new Error(`Invalid caseName. Valid options are: ${validCases.join(', ')}`);
+  }
 }
+
+
 
 /**
  * Write a function to replace a given word in the text with the replacement word
@@ -87,7 +175,23 @@ function changeTextCase(text, caseName) {
  */
 function replaceWordInText(text, word, replacement) {
   // Your code here
+  // Check if the word to be replaced is empty
+  if (!word) {
+    throw new Error("Word to be replaced cannot be empty");
+  }
+
+  // Check if the replacement word is empty
+  if (!replacement) {
+    throw new Error("Replacement word cannot be empty");
+  }
+
+  // Replace all occurrences of the word with the replacement
+  const replacedText = text.replace(new RegExp(word, 'gi'), replacement);
+
+  return replacedText;
 }
+
+
 
 /**
  * Write a function to extract price in number format from the text
@@ -100,6 +204,14 @@ function replaceWordInText(text, word, replacement) {
  */
 function extractPriceFromText(text) {
   // Your code here
+  const regex = /\$(\d+(\.\d{1,2})?)/; // Regular expression to match price
+  const match = text.match(regex);
+
+  if (match) {
+    return parseFloat(match[1]); // Extract the matched price and convert to number
+  } else {
+    return "No matching price was found";
+  }
 }
 
 module.exports = {
